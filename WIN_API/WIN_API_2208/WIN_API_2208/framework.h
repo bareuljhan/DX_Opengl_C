@@ -21,6 +21,7 @@
 #include <algorithm>
 
 using namespace std;
+#include "Types.h"
 
 // Framework
 #include "framework/Math/Vector2.h"

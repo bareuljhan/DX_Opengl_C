@@ -102,7 +102,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        szWindowClass,                       // 윈도우 창 클래스 이름
        szTitle,                             // 윈도우 타이틀 이름
        WS_OVERLAPPEDWINDOW,                 // 윈도우 스타일
-      0, 0, 1280, 720,   // 윈도우 창 크기
+      0, 0, WIN_WIDTH, WIN_HEIGHT,          // 윈도우 창 크기
        nullptr, nullptr, hInstance, nullptr);
 
 

@@ -43,7 +43,5 @@ public:
 public:
 	float x;
 	float y;
-	int mousex;
-	int mousey;
 };
 
