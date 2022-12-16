@@ -151,6 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Cannon\Ball.h" />
+    <ClInclude Include="framework\Collider\Line.h" />
+    <ClInclude Include="Scene\LineScene.h" />
+    <ClInclude Include="Object\Cannon\Barrel.h" />
+    <ClInclude Include="Scene\CannonScene.h" />
+    <ClInclude Include="Object\Cannon\Cannon.h" />
+    <ClInclude Include="framework\Collider\Collider.h" />
     <ClInclude Include="Scene\CollisionScene.h" />
     <ClInclude Include="framework\Collider\CircleCollider.h" />
     <ClInclude Include="framework.h" />
@@ -165,6 +172,13 @@
     <ClInclude Include="WIN_API_2208.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Cannon\Ball.cpp" />
+    <ClCompile Include="framework\Collider\Line.cpp" />
+    <ClCompile Include="Scene\LineScene.cpp" />
+    <ClCompile Include="Object\Cannon\Barrel.cpp" />
+    <ClCompile Include="Scene\CannonScene.cpp" />
+    <ClCompile Include="Object\Cannon\Cannon.cpp" />
+    <ClCompile Include="framework\Collider\Collider.cpp" />
     <ClCompile Include="Scene\CollisionScene.cpp" />
     <ClCompile Include="framework\Collider\CircleCollider.cpp" />
     <ClCompile Include="framework.cpp">

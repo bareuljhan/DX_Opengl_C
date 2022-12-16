@@ -26,9 +26,16 @@ using namespace std;
 // Framework
 #include "framework/Math/Vector2.h"
 
-
+#include "framework/Collider/Line.h"
+#include "framework/Collider/Collider.h"
 #include "framework/Collider/CircleCollider.h"
 #include "framework/Collider/RectCollider.h"
+
+// obj
+#include "Object/Cannon/Ball.h"
+#include "Object/Cannon/Barrel.h"
+#include "Object/Cannon/Cannon.h"
+ 
 // Scene
 
 #include "Scene/Scene.h"

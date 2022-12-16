@@ -1,22 +1,21 @@
 #include "framework.h"
+#include "Vector2.h"
 
 Vector2::Vector2()
-: x(0)
-, y(0)
+	: x(0)
+	, y(0)
 {
 }
 
 Vector2::Vector2(float x, float y)
-: x(x)
-, y(y)
+	: x(x)
+	, y(y)
 {
 }
 
 Vector2::~Vector2()
-
 {
 }
-
 
 Vector2 Vector2::operator+(const Vector2& other) const
 {
@@ -30,7 +29,7 @@ Vector2 Vector2::operator+(const Vector2& other) const
 
 Vector2 Vector2::operator-(const Vector2& other) const
 {
-	return Vector2(x - other.x, y-other.y);
+	return Vector2(x - other.x, y - other.y);
 }
 
 Vector2 Vector2::operator*(const float& value) const
@@ -40,47 +39,26 @@ Vector2 Vector2::operator*(const float& value) const
 
 bool Vector2::operator<(const Vector2& other) const
 {
-	if (this->Length() < other.Length())
-
 	return this->Length() < other.Length();
 }
 
 bool Vector2::operator>(const Vector2& other) const
 {
-	if (this->Length() > other.Length())
-
-		return this->Length() > other.Length();
+	return this->Length() > other.Length();
 }
 
-bool Vector2::operator==(const Vector2& other) const
+Vector2& Vector2::operator+=(const Vector2& other)
 {
-	if(this->Length() == other.Length())
+	this->x = this->x + other.x;
+	this->y = this->y + other.y;
 
-	return this->Length() == other.Length();
-}
-
-bool Vector2::operator+=(const Vector2& other) const
-{
-	if (this->Length() != other.Length())
-
-	return this->Length() != other.Length();
-
+	return (*this);
 }
 
 Vector2& Vector2::operator=(const Vector2& other)
 {
 	this->x = other.x;
 	this->y = other.y;
-
-	//Vector2 result = *this; // this -> 나 자신인데 나 자신을 가리키는 주소로 가기
-
-	return (*this);
-}
-
-Vector2& Vector2::operator+=(const Vector2& other)
-{
-	this->x = x + other.x;
-	this->y = y + other.y;
 
 	return (*this);
 }
@@ -105,17 +83,37 @@ Vector2 Vector2::operator++(int)
 
 float Vector2::Length() const
 {
-	float temp = x * x + y * y; // <=> powf(x,2) + powf(y,2);
-
-	return sqrt(temp);  // sqrt(powf(x,2) + powf(y,2));
+	return sqrt(powf(x, 2) + powf(y, 2));
 }
 
-float Vector2::Cross(const Vector2& other) const
+float Vector2::Cross(const Vector2& other)
 {
-	return 0.0f;
+	return x * other.y - y * other.x;
 }
 
-Vector2 Vector2::Normal() const
+bool Vector2::IsBetween(const Vector2& a, const Vector2& b)
 {
-	return Vector2();
+	float z1 = this->Cross(a);
+	float z2 = this->Cross(b);
+
+	if (z1 * z2 < 0)
+		return true;
+
+	return false;
 }
+
+Vector2 Vector2::NormalVector2()
+{
+	Vector2 temp;
+	temp.x = x / Length();
+	temp.y = y / Length();
+
+	return temp;
+}
+
+void Vector2::Normallize()
+{
+	x = x / Length();
+	y = y / Length();
+}
+

@@ -2,56 +2,40 @@
 #include "RectCollider.h"
 
 RectCollider::RectCollider()
+:Collider()
 {
-	center = Vector2(0, 0);
 	size = Vector2(0, 0);
-
-    {
-        _pens.reserve(3);
-        HPEN red = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-        HPEN green = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
-        HPEN blue = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
-        _pens.push_back(red);
-        _pens.push_back(green);
-        _pens.push_back(blue);
-    }
 }
 
 RectCollider::RectCollider(Vector2 center, Vector2 size)
-:center(center)
-,size(size)
+:size(size)
 {
-    {
-        _pens.reserve(3);
-        HPEN red = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-        HPEN green = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
-        HPEN blue = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
-        _pens.push_back(red);
-        _pens.push_back(green);
-        _pens.push_back(blue);
-
-        _curPen = _pens[1];
-    }
+    this->center = center;
+    _type = Collider::Type::RECT;
 }
 
 RectCollider::~RectCollider()
 {
-    for (auto& pen : _pens)
-        DeleteObject(pen);
 }
 
 void RectCollider::Update()
 {
+    if (_isActive == false)
+        return;
 }
 
 void RectCollider::Render(HDC hdc)
 {
+    if (_isActive == false)
+        return;
     SelectObject(hdc, _curPen);
 	Rectangle(hdc, Left(), Top(), Right(), Bottom());
 }
 
 bool RectCollider::IsCollision(const Vector2& pos)
 {
+    if (_isActive == false)
+        return false;
     if (pos.x <= Right() && pos.x >= Left())
     {
         if (pos.y <= Bottom() && pos.y >= Top())
@@ -72,5 +56,18 @@ bool RectCollider::IsCollision(const shared_ptr<RectCollider> rect)
 
 bool RectCollider::IsCollision(const shared_ptr<CircleCollider> circle)
 {
+    Vector2 center = circle->GetCenter();
+    float radius = circle->GetRadius();
 
+    if (center.x <= Right() && center.x >= Left())
+        if (center.y <= Right() + radius && center.y >= Top() - radius)
+            return true;
+
+    if (center.x <= Right() + radius && center.x >= Left() - radius)
+        if (center.y <= Right() && center.y >= Top())
+            return true;
+
+    if (circle->IsCollision(LeftTop()) || circle->IsCollision(RightTop()) ||
+        circle->IsCollision(LeftBottom()) || circle->IsCollision(RightBottom()))
+        return true;
 }

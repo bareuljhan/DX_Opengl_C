@@ -1,5 +1,5 @@
 #pragma once
-class RectCollider
+class RectCollider : public Collider
 {
 
 public:
@@ -7,10 +7,10 @@ public:
 	RectCollider(Vector2 center, Vector2 size);
 	~RectCollider();
 
-	void Update();
-	void Render(HDC hdc);
 
-	Vector2& GetCenter() { return center; }
+	virtual void Update() override;
+	virtual void Render(HDC hdc) override;
+
 	Vector2& GetSize() { return size; }
 
 	float Left() { return center.x - size.x * 0.5f; }
@@ -18,21 +18,20 @@ public:
 	float Right() { return center.x + size.x * 0.5f; }
 	float Bottom() { return center.y + size.y * 0.5f; }
 
-	void SetRed() { _curPen = _pens[0]; }
-	void SetGreen() { _curPen = _pens[1]; }
+
 
 	// AABB 충돌
 	// -> 회전하지 않는 사각형의 충돌
-	bool IsCollision(const Vector2& pos);
-	bool IsCollision(const shared_ptr<RectCollider> rect);
-	bool IsCollision(const shared_ptr<CircleCollider> circle);
+	virtual bool IsCollision(const Vector2& pos) override;
+	virtual bool IsCollision(const shared_ptr<RectCollider> rect) override;
+	virtual bool IsCollision(const shared_ptr<CircleCollider> circle) override;
 
+	Vector2 LeftTop() { return Vector2(center.x - size.x * 0.5f, center.y - size.y * 0.5f); }
+	Vector2 RightTop() { return Vector2(center.x + size.x * 0.5f, center.y - size.y * 0.5f); }
+	Vector2 LeftBottom() { return Vector2(center.x - size.x * 0.5f, center.y + size.y * 0.5f); }
+	Vector2 RightBottom() { return Vector2(center.x + size.x * 0.5f, center.y + size.y * 0.5f); }
 private:
-	vector<HPEN> _pens;
 
-	HPEN _curPen;
-
-	Vector2 center;
 	Vector2 size;
 };
 

@@ -1,50 +1,28 @@
 #include "framework.h"
 #include "CircleCollider.h"
 
-CircleCollider::CircleCollider()
-:radius(0.0)
-{
-	center = Vector2(0, 0);
-	{
-		_pens.reserve(3);
-		HPEN red = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-		HPEN green = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
-		HPEN blue = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
-		_pens.push_back(red);
-		_pens.push_back(green);
-		_pens.push_back(blue);
-	}
-}
-
 CircleCollider::CircleCollider(Vector2 center, float radius)
-:center(center)
+:Collider()
 ,radius(radius)
 {
-	{
-		_pens.reserve(3);
-		HPEN red = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-		HPEN green = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
-		HPEN blue = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
-		_pens.push_back(red);
-		_pens.push_back(green);
-		_pens.push_back(blue);
-
-		_curPen = _pens[1];
-	}
+	this->center = center;
+	_type = Collider::Type::CIRCLE;
 }
 
 CircleCollider::~CircleCollider()
 {
-	for (auto& pen : _pens)
-		DeleteObject(pen);
 }
 
 void CircleCollider::Update()
 {
+	if (_isActive == false)
+		return;
 }
 
 void CircleCollider::Render(HDC hdc)
 {
+	if (_isActive == false)
+		return;
 	SelectObject(hdc, _curPen);
 	float left = center.x - radius;
 	float top = center.y - radius;
@@ -55,6 +33,8 @@ void CircleCollider::Render(HDC hdc)
 
 bool CircleCollider::IsCollision(const Vector2& pos)
 {
+	if (_isActive == false)
+		return false;
 	Vector2 centerToPos = pos - center;
 	float length = centerToPos.Length();
 
@@ -71,5 +51,16 @@ bool CircleCollider::IsCollision(shared_ptr<CircleCollider> circle)
 
 bool CircleCollider::IsCollision(shared_ptr<class RectCollider> rect)
 {
+	if (center.x <= rect->Right() && center.x >= rect->Left())
+		if (center.y <= rect->Right() + radius && center.y >= rect->Top() - radius)
+			return true;
 
+	if (center.x <= rect->Right() + radius && center.x >= rect->Left() - radius)
+		if (center.y <= rect->Right() && center.y >= rect->Top())
+			return true;
+	
+	if (this->IsCollision(rect->LeftTop()) || this->IsCollision(rect->RightTop()) || 
+		this->IsCollision(rect->LeftBottom()) || this->IsCollision(rect->RightBottom()))
+		return true;
+	return false;
 }

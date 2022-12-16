@@ -1,30 +1,24 @@
 #pragma once
-class CircleCollider : public
+class CircleCollider : public Collider, public enable_shared_from_this<CircleCollider>
 {
 public:
-	CircleCollider();
 	CircleCollider(Vector2 center, float radius);
 	~CircleCollider();
 
-	void Update();
-	void Render(HDC hdc);
+	virtual void Update() override;
+	virtual void Render(HDC hdc) override;
 
-	Vector2& GetCenter() { return center; }
+
 	float& GetRadius() { return radius; }
 
-	void SetRed() { _curPen = _pens[0]; }
-	void SetGreen() { _curPen = _pens[1]; }
 
-	bool IsCollision(const Vector2& pos);
-	bool IsCollision(const shared_ptr<CircleCollider> circle);
-	bool IsCollision(const shared_ptr<class RectCollider> rect);
+	virtual bool IsCollision(const Vector2& pos) override;
+	virtual bool IsCollision(const shared_ptr<CircleCollider> circle) override;
+	virtual bool IsCollision(const shared_ptr<class RectCollider> rect) override;
+
 
 private:
-	vector<HPEN> _pens;
 
-	HPEN _curPen;
-
-	Vector2 center;
 	float radius;
 };
 
