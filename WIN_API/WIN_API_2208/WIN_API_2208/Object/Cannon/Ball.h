@@ -16,5 +16,7 @@ private:
 
 	Vector2 _dir = { 0, 0 };
 	float _speed = 5.0f;
+
+	float _delay = 0.0f;
 };
 

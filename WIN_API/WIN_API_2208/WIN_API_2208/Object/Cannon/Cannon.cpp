@@ -5,7 +5,13 @@ Cannon::Cannon()
 {
 	_body = make_shared<CircleCollider>(Vector2(CENTER_X, CENTER_Y), 30.0f);
 	_barrel = make_shared<Barrel>();
-	_ball = make_shared<Ball>();
+
+	for (int i = 0; i < 30; i++)
+	{
+		shared_ptr<Ball> ball = make_shared<Ball>();
+		ball->_isActive = false;
+		_balls.push_back(ball);
+	}
 }
 
 Cannon::~Cannon()
@@ -30,13 +36,22 @@ void Cannon::Update()
 	{
 		_angle -= 0.1f;
 	}
-	if (GetAsyncKeyState(VK_SPACE))
+	if (GetAsyncKeyState(VK_SPACE) & 0x0001)
 	{
-		_ball->_isActive = true;
+		auto ball = std::find_if(_balls.begin(), _balls.end(), [](const shared_ptr<Ball>& ball)->bool
+			{
+				if (!ball->_isActive)
+					return true;
+				return false;
+			});
 		Vector2 direction = _barrel->GetDirection();
-		_ball->Fire(_body->GetCenter(),direction);
+		if (ball != _balls.end())
+		{
+			(*ball)->_isActive = true;
+			Vector2 startPos = _barrel->GetEndPos();
+			(*ball)->Fire(startPos,direction);
+		}
 	}
-
 
 	_dir.x = cos(_angle);
 	_dir.y = -sin(_angle);
@@ -47,7 +62,8 @@ void Cannon::Update()
 
 	_body->Update();
 	_barrel->Update();
-	_ball->Update();
+	for(auto ball : _balls)
+		ball->Update();
 
 }
 
@@ -55,5 +71,6 @@ void Cannon::Render(HDC hdc)
 {
 	_barrel->Render(hdc);
 	_body->Render(hdc);
-	_ball->Render(hdc);
+	for (auto ball : _balls)
+		ball->Render(hdc);
 }

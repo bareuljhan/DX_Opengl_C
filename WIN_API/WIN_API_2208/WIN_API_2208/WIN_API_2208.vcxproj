@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Object\Cannon\Ball.h" />
     <ClInclude Include="framework\Collider\Line.h" />
+    <ClInclude Include="Scene\ProjectionScene.h" />
     <ClInclude Include="Scene\LineScene.h" />
     <ClInclude Include="Object\Cannon\Barrel.h" />
     <ClInclude Include="Scene\CannonScene.h" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="Object\Cannon\Ball.cpp" />
     <ClCompile Include="framework\Collider\Line.cpp" />
+    <ClCompile Include="Scene\ProjectionScene.cpp" />
     <ClCompile Include="Scene\LineScene.cpp" />
     <ClCompile Include="Object\Cannon\Barrel.cpp" />
     <ClCompile Include="Scene\CannonScene.cpp" />

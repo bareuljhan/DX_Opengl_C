@@ -91,6 +91,10 @@ float Vector2::Cross(const Vector2& other)
 	return x * other.y - y * other.x;
 }
 
+float Vector2::Dot(const Vector2& other) const
+{
+	return (other.x * x + other.y * y);
+}
 bool Vector2::IsBetween(const Vector2& a, const Vector2& b)
 {
 	float z1 = this->Cross(a);

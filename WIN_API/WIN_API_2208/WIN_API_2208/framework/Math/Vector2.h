@@ -22,6 +22,7 @@ public:
 	float Length() const;
 
 	float Cross(const Vector2& other);
+	float Dot(const Vector2& other) const;
 
 	bool IsBetween(const Vector2& a, const Vector2& b);
 

@@ -14,7 +14,21 @@ void Ball::Update()
 {
 	if (_isActive == false)
 		return;
+
+	if (_delay >= 30.0f)
+	{
+		_isActive = false;
+		_delay = 0.0f;
+	}
+	 
+	_delay += 0.1f;
 	_circle->GetCenter() += _dir * _speed;
+
+	if (_circle->GetCenter().y < 0 || _circle->GetCenter().y > WIN_HEIGHT)
+		_dir.y *= -1;
+	if (_circle->GetCenter().x < 0 || _circle->GetCenter().x > WIN_WIDTH)
+		_dir.x *= -1;
+	//_dir.y += GRAVITY * 0.01f;
 
 	_circle->Update();
 }
