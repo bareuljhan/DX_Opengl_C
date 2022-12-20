@@ -8,9 +8,15 @@ public:
 	void Update(); // Update
 	void Render(HDC hdc); // Render ºÐ¸®
 
+	static HDC _backBuffer;
+
+
 private:
+
 	unordered_map<string, shared_ptr<Scene>> _sceneTable;
 	shared_ptr<Scene> _curScene;
+
+	HBITMAP _hBit;
 };
 
 

@@ -9,7 +9,7 @@ ProjectionScene::ProjectionScene()
 
 	_line2 = make_shared<Line>();
 	_line2->_startPos = Vector2(100, 600);
-	_line2->_endPos = Vector2(WIN_WIDTH, 600);
+	_line2->_endPos = Vector2(WIN_WIDTH, 300);
 
 	_projection = make_shared<Line>();
 	_projection->_startPos = Vector2(100, 500);

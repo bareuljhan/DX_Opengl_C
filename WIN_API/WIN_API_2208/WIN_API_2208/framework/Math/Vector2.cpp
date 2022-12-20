@@ -117,7 +117,9 @@ Vector2 Vector2::NormalVector2()
 
 void Vector2::Normallize()
 {
-	x = x / Length();
-	y = y / Length();
+	float length = Length();
+
+	x = x / length;
+	y = y / length;
 }
 
