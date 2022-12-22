@@ -17,6 +17,7 @@
 #include <time.h>
 #include <memory>
 #include <vector>
+#include <stack>
 #include <unordered_map>
 #include <string>
 #include <algorithm>
