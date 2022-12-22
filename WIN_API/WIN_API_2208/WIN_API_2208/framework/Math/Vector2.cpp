@@ -13,6 +13,12 @@ Vector2::Vector2(float x, float y)
 {
 }
 
+Vector2::Vector2(int x, int y)
+	:x((float)x)
+	,y((float)y)
+{
+}
+
 Vector2::~Vector2()
 {
 }
@@ -45,6 +51,18 @@ bool Vector2::operator<(const Vector2& other) const
 bool Vector2::operator>(const Vector2& other) const
 {
 	return this->Length() > other.Length();
+}
+
+bool Vector2::operator==(const Vector2& other) const
+{
+	if (x == other.x && y == other.y)
+		return true;
+	return false;
+}
+
+bool Vector2::operator!=(const Vector2& other) const
+{
+	return !this->operator==(other);
 }
 
 Vector2& Vector2::operator+=(const Vector2& other)

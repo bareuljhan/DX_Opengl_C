@@ -40,6 +40,7 @@ using namespace std;
 // Maze
 #include"Object/Maze/Block.h"
 #include"Object/Maze/Maze.h"
+#include"Object/Maze/Player.h"
 
 // Scene
 #include "Scene/Scene.h"

@@ -6,9 +6,10 @@ Collider::Collider()
 {
 	{
 		_pens.reserve(3);
-		HPEN red = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
-		HPEN green = CreatePen(PS_SOLID, 3, RGB(0, 255, 0));
-		HPEN blue = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
+		HPEN red = CreatePen(PS_SOLID, 0, RGB(0, 0, 0));
+		HPEN green = CreatePen(PS_SOLID, 0, RGB(0, 0, 0));
+		HPEN blue = CreatePen(PS_SOLID, 0, RGB(0, 0, 0));
+
 		_pens.push_back(red);
 		_pens.push_back(green);
 		_pens.push_back(blue);

@@ -11,7 +11,7 @@ Maze::Maze()
 		{
 			shared_ptr<Block> block = make_shared<Block>();
 			block->SetType(Block::Type::DISABLE);
-			Vector2 distance = { 19.0f * x, 19.0f * y };
+			Vector2 distance = { 17.0f * x, 17.0f * y };
 			block->SetPosition(offset + distance);
 
 			_blocks.push_back(block);

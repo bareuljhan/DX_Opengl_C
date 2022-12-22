@@ -3,19 +3,23 @@
 
 Block::Block()
 {
-	_rect = make_shared<RectCollider>(Vector2(CENTER_X, CENTER_Y), Vector2(13, 13));
+	_rect = make_shared<RectCollider>(Vector2(CENTER_X, CENTER_Y), Vector2(14, 14));
 
 	HBRUSH white = CreateSolidBrush(RGB(255, 255, 255));
 	HBRUSH green = CreateSolidBrush(RGB(0, 255, 0));
 	HBRUSH red = CreateSolidBrush(RGB(255, 0, 0));
 	HBRUSH yellow = CreateSolidBrush(RGB(0xFF, 0xFF, 0));
 	HBRUSH cyan = CreateSolidBrush(RGB(0, 0xFF, 0xFF));
+	HBRUSH purple = CreateSolidBrush(RGB(0x80, 0x00, 0x80));
+	HBRUSH grey = CreateSolidBrush(RGB(150, 150, 150));
 
 	_brushes.push_back(white);
 	_brushes.push_back(green);
 	_brushes.push_back(red);
 	_brushes.push_back(yellow);
 	_brushes.push_back(cyan);
+	_brushes.push_back(purple);
+	_brushes.push_back(grey);
 }
 
 Block::~Block()
@@ -47,7 +51,7 @@ void Block::Render(HDC hdc)
 		break;
 	case Block::Type::END:
 		_rect->SetRed();
-		break;
+		break;	
 	default:
 		break;
 	}

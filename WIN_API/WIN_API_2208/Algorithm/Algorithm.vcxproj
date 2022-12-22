@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1c00b494-9cdb-4557-ad14-d73c38716f54}</ProjectGuid>
-    <RootNamespace>WINAPI2208</RootNamespace>
+    <ProjectGuid>{bda0dc00-e256-46fd-9879-4676817b89e0}</ProjectGuid>
+    <RootNamespace>Algorithm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,31 +72,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>framework.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -106,13 +100,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>framework.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,13 +114,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>framework.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -138,82 +128,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>framework.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Object\Maze\Block.h" />
-    <ClInclude Include="Object\Maze\Maze.h" />
-    <ClInclude Include="Object\Maze\Player.h" />
-    <ClInclude Include="Scene\MazeScene.h" />
-    <ClInclude Include="Object\Cannon\Ball.h" />
-    <ClInclude Include="framework\Collider\Line.h" />
-    <ClInclude Include="Scene\ProjectionScene.h" />
-    <ClInclude Include="Scene\LineScene.h" />
-    <ClInclude Include="Object\Cannon\Barrel.h" />
-    <ClInclude Include="Scene\CannonScene.h" />
-    <ClInclude Include="Object\Cannon\Cannon.h" />
-    <ClInclude Include="framework\Collider\Collider.h" />
-    <ClInclude Include="Scene\CollisionScene.h" />
-    <ClInclude Include="framework\Collider\CircleCollider.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="framework\Math\Vector2.h" />
-    <ClInclude Include="framework\Collider\RectCollider.h" />
-    <ClInclude Include="Scene\PaintScene.h" />
-    <ClInclude Include="Program\Program.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="Scene\Scene.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="Types.h" />
-    <ClInclude Include="WIN_API_2208.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Object\Maze\Block.cpp" />
-    <ClCompile Include="Object\Maze\Maze.cpp" />
-    <ClCompile Include="Object\Maze\Player.cpp" />
-    <ClCompile Include="Scene\MazeScene.cpp" />
-    <ClCompile Include="Object\Cannon\Ball.cpp" />
-    <ClCompile Include="framework\Collider\Line.cpp" />
-    <ClCompile Include="Scene\ProjectionScene.cpp" />
-    <ClCompile Include="Scene\LineScene.cpp" />
-    <ClCompile Include="Object\Cannon\Barrel.cpp" />
-    <ClCompile Include="Scene\CannonScene.cpp" />
-    <ClCompile Include="Object\Cannon\Cannon.cpp" />
-    <ClCompile Include="framework\Collider\Collider.cpp" />
-    <ClCompile Include="Scene\CollisionScene.cpp" />
-    <ClCompile Include="framework\Collider\CircleCollider.cpp" />
-    <ClCompile Include="framework.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">framework.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">framework.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">framework.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">framework.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="framework\Math\Vector2.cpp" />
-    <ClCompile Include="framework\Collider\RectCollider.cpp" />
-    <ClCompile Include="Scene\PaintScene.cpp" />
-    <ClCompile Include="Program\Program.cpp" />
-    <ClCompile Include="Scene\Scene.cpp" />
-    <ClCompile Include="WIN_API_2208.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="WIN_API_2208.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="WIN_API_2208.ico" />
+    <ClCompile Include="Algorithm.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

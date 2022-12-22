@@ -43,7 +43,7 @@ void Program::Update()
 
 void Program::Render(HDC hdc)
 {
-	PatBlt(hdc, 0, 0, WIN_WIDTH, WIN_HEIGHT, BLACKNESS);
+	PatBlt(_backBuffer, 0, 0, WIN_WIDTH, WIN_HEIGHT, BLACKNESS);
 
 	_curScene->Render(_backBuffer);
 

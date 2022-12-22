@@ -9,3 +9,13 @@
 #define PI 3.141592
 
 #define LERP(s,e,t) s + (e - s) * t // 0 이면 s, 1 이면 e
+
+enum Dir
+{
+	DIR_UP,
+	DIR_LEFT,
+	DIR_DOWN,
+	DIR_RIGHT,
+
+	DIR_COUNT = 4
+};

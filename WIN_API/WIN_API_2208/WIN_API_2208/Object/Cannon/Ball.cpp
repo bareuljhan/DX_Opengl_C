@@ -22,6 +22,7 @@ void Ball::Update()
 	}
 	 
 	_delay += 0.1f;
+
 	_circle->GetCenter() += _dir * _speed;
 
 	if (_circle->GetCenter().y < 0 || _circle->GetCenter().y > WIN_HEIGHT)

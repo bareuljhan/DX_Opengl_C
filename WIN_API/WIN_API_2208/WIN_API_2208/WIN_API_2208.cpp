@@ -150,7 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
     {
         program->Update();
-        // InvalidateRect(hWnd, nullptr, false); // Paint 메시지를 계속 보내주는 애
+        InvalidateRect(hWnd, nullptr, false); // Paint 메시지를 계속 보내주는 애
         break;
     }
     case WM_MOUSEMOVE:
