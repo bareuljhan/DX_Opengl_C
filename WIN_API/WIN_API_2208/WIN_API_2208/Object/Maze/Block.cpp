@@ -12,6 +12,7 @@ Block::Block()
 	HBRUSH cyan = CreateSolidBrush(RGB(0, 0xFF, 0xFF));
 	HBRUSH purple = CreateSolidBrush(RGB(0x80, 0x00, 0x80));
 	HBRUSH grey = CreateSolidBrush(RGB(150, 150, 150));
+	HBRUSH blue = CreateSolidBrush(RGB(50, 50, 200));
 
 	_brushes.push_back(white);
 	_brushes.push_back(green);
@@ -20,6 +21,7 @@ Block::Block()
 	_brushes.push_back(cyan);
 	_brushes.push_back(purple);
 	_brushes.push_back(grey);
+	_brushes.push_back(blue);
 }
 
 Block::~Block()

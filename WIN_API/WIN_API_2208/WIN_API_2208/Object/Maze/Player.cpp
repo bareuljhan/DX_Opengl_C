@@ -6,7 +6,26 @@ Player::Player(shared_ptr<Maze> maze)
 {
 	_pos = _maze->GetStartPos();
 	_maze->GetBlock(_pos)->SetType(Block::Type::PLAYER);
-	RightHand();
+
+
+	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
+	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, { -1,-1 }));
+	BFS(_pos, _maze->GetEndPos());
+
+	//_visited = vector<vector<bool>>(25, vector<bool>(25, false));
+	// vector<Vector2> tempPath;
+	// tempPath.reserve(300);
+	//DFS(_pos, _maze->GetEndPos(), tempPath);
+
+	////backTracking 
+	//for (auto& pos : tempPath)
+	//{
+	//	_path.push_back(pos);
+	//	if (pos == _maze->GetEndPos())
+	//		break;
+	//}
+	// 
+	// RightHand();
 }
 
 Player::~Player()
@@ -102,6 +121,86 @@ void Player::RightHand()
 	}
 	std::reverse(_path.begin(), _path.end());
 	
+}
+
+void Player::DFS(Vector2 pos, Vector2 end, vector<Vector2> &tempPath)
+{
+	tempPath.push_back(pos);
+	_maze->GetBlock(pos)->SetType(Block::Type::SEARCH_PRINT);
+	_visited[pos.y][pos.x] = true;
+
+	if (pos == end)
+	{
+		return;
+	}
+	Vector2 frontPos[4] =
+	{
+		Vector2 {0, 1},		// DOWN		2
+		Vector2 {1, 0},		// RIGHT	3
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0}		// LEFT		1
+	};
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		Vector2 there = pos + frontPos[i];
+		if (CanGo(there) == false)
+			continue;
+		if (_visited[there.y][there.x] == true)
+			continue;
+		DFS(there, end, tempPath);
+	}
+
+}
+
+void Player::BFS(Vector2 pos, Vector2 end)
+{
+	queue<Vector2> q;
+
+	q.push(pos);
+	_path.push_back(pos);
+	_discovered[pos.y][pos.x] = true;
+	_parent[pos.y][pos.x] = pos;
+
+	if (pos == end)
+	{
+		return;
+	}
+
+	Vector2 frontPos[4] =
+	{
+		Vector2 {0, 1},		// DOWN		2
+		Vector2 {1, 0},		// RIGHT	3
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0}		// LEFT		1
+	};
+
+	while (true)
+	{
+		if (q.empty() == true)
+			break;
+
+		Vector2 here = q.front();
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vector2 there = pos + frontPos[i];
+			if (_discovered[there.y][there.x] == true)
+				continue;
+			if (CanGo(there) == false)
+				continue;
+			if (here == there)
+				continue;
+
+
+			q.push(there);
+			_discovered[there.y][there.x] = true;
+			_parent[there.y][there.x] = here;
+		}
+
+	}
 }
 
 bool Player::CanGo(Vector2 pos)

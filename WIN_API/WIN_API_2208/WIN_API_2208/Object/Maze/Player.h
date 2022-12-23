@@ -8,7 +8,12 @@ public:
 	void Update();
 
 	void RightHand();
+	void DFS(Vector2 pos, Vector2 end, vector<Vector2> &tempPath);
+	void BFS(Vector2 pos, Vector2 end);
 	bool CanGo(Vector2 pos);
+
+
+
 private:
 	Vector2 _pos = { 0, 0 };
 
@@ -19,5 +24,11 @@ private:
 	shared_ptr<Maze> _maze;
 	Dir _dir = Dir::DIR_UP;
 
+	// DFS
+	vector<vector<bool>> _visited;
+	
+	// BFS
+	vector<vector<bool>> _discovered;
+	vector<vector<Vector2>> _parent;
 };
 
