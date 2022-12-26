@@ -9,7 +9,7 @@ Player::Player(shared_ptr<Maze> maze)
 
 
 	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
-	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, { -1,-1 }));
+	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1,-1)));
 	BFS(_pos, _maze->GetEndPos());
 
 	//_visited = vector<vector<bool>>(25, vector<bool>(25, false));
@@ -17,7 +17,7 @@ Player::Player(shared_ptr<Maze> maze)
 	// tempPath.reserve(300);
 	//DFS(_pos, _maze->GetEndPos(), tempPath);
 
-	////backTracking 
+	// backTracking 
 	//for (auto& pos : tempPath)
 	//{
 	//	_path.push_back(pos);
@@ -156,25 +156,19 @@ void Player::DFS(Vector2 pos, Vector2 end, vector<Vector2> &tempPath)
 
 void Player::BFS(Vector2 pos, Vector2 end)
 {
+	Vector2 frontPos[4] =
+	{
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0},	// LEFT		1
+		Vector2 {0, 1},		// DOWN		2
+		Vector2 {1, 0}		// RIGHT	3
+	};
 	queue<Vector2> q;
 
 	q.push(pos);
-	_path.push_back(pos);
 	_discovered[pos.y][pos.x] = true;
 	_parent[pos.y][pos.x] = pos;
 
-	if (pos == end)
-	{
-		return;
-	}
-
-	Vector2 frontPos[4] =
-	{
-		Vector2 {0, 1},		// DOWN		2
-		Vector2 {1, 0},		// RIGHT	3
-		Vector2 {0, -1},	// UP		0
-		Vector2 {-1, 0}		// LEFT		1
-	};
 
 	while (true)
 	{
@@ -186,21 +180,33 @@ void Player::BFS(Vector2 pos, Vector2 end)
 
 		for (int i = 0; i < 4; i++)
 		{
-			Vector2 there = pos + frontPos[i];
+			Vector2 there = here + frontPos[i];
 			if (_discovered[there.y][there.x] == true)
 				continue;
 			if (CanGo(there) == false)
 				continue;
-			if (here == there)
-				continue;
-
 
 			q.push(there);
 			_discovered[there.y][there.x] = true;
 			_parent[there.y][there.x] = here;
 		}
-
 	}
+
+	Vector2 finder = _parent[end.y][end.x];
+	_path.push_back(end);
+	while (true)
+	{
+		_path.push_back(finder);
+		finder = _parent[finder.y][finder.x];
+
+		if (finder == pos)
+		{
+			_path.push_back(pos);
+			break;
+		}
+	}
+
+	std::reverse(_path.begin(), _path.end());
 }
 
 bool Player::CanGo(Vector2 pos)
