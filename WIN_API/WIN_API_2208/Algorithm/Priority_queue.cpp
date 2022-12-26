@@ -9,7 +9,7 @@
 using namespace std;
 
 // √÷¥Î»¸
-template<class T, vector<T>, greater<T>>
+template<class T, class V = vector<T>, class G = greater<T>>
 class Priority_Queue
 {
 public:
@@ -84,7 +84,18 @@ private:
 int main()
 {
 	priority_queue<int, vector<int>, greater<int>> stdPq;
-	Priority_Queue pq;
+	Priority_Queue<int, vector<int>, greater<int>> pq;
+	stdPq.push(10);
+	stdPq.push(7);
+	stdPq.push(6);
+	stdPq.push(3);
+	stdPq.push(15);
+
+	cout << stdPq.top() << endl;
+	stdPq.pop();
+	cout << stdPq.top() << endl;
+
+	cout << "------" << endl;
 
 	pq.Push(10);
 	pq.Push(7);
