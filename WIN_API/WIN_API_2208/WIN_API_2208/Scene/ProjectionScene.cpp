@@ -27,7 +27,7 @@ void ProjectionScene::Update()
 	_line1->_endPos = mousePos;
 	Vector2 line1Vec = _line1->_endPos - _line1->_startPos;
 	Vector2 line2Vec = _line2->_endPos - _line2->_startPos;
-	line2Vec.Normallize();
+	line2Vec.Normalize();
 	float length = line2Vec.Length();
 	float dot = line1Vec.Dot(line2Vec);
 
@@ -49,5 +49,3 @@ void ProjectionScene::Render(HDC hdc)
 	_line2->Render(hdc);
 	_projection->Render(hdc);
 }
-
-

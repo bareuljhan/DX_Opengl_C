@@ -9,7 +9,7 @@
 using namespace std;
 
 // 최대힙
-template<class T, class V = vector<T>, class G = greater<T>>
+template<typename T, typename Container = vector<T>, typename Pred = less<T>>
 class Priority_Queue
 {
 public:
@@ -19,7 +19,7 @@ public:
 
 		// 규칙 확인
 
-		int now = static_cast<T>(v.size() - 1); // 맨 마지막
+		int now = static_cast<int>(v.size() - 1); // 맨 마지막
 
 		while (true)
 		{
@@ -27,7 +27,7 @@ public:
 				break;
 			int parent = (now - 1) / 2;
 
-			if (v[now] < v[parent])
+			if (Pred()(v[now], v[parent]))
 			{
 				break;
 			}
@@ -53,10 +53,10 @@ public:
 
 			int next = now;
 			
-			if (v[next] < v[leftChild])
+			if (Pred()(v[next], v[leftChild]))
 				next = leftChild;
 
-			if (rightChild < (int)v.size() && v[next] < v[rightChild])
+			if (rightChild < (int)v.size() && Pred()(v[next], v[rightChild]))
 				next = rightChild;
 
 			if (next == now)
@@ -78,7 +78,7 @@ public:
 	}
 
 private:
-	vector<T> v;
+	Container v;
 };
 
 int main()

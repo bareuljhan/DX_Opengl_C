@@ -133,3 +133,11 @@ Vector2 Vector2::NormalVector2()
 	return temp;
 }
 
+void Vector2::Normalize()
+{
+	float length = Length();
+
+	x = x / length;
+	y = y / length;
+}
+

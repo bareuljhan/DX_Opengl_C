@@ -11,21 +11,7 @@ Player::Player(shared_ptr<Maze> maze)
 	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
 	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1,-1)));
 	BFS(_pos, _maze->GetEndPos());
-
-	//_visited = vector<vector<bool>>(25, vector<bool>(25, false));
-	// vector<Vector2> tempPath;
-	// tempPath.reserve(300);
-	//DFS(_pos, _maze->GetEndPos(), tempPath);
-
-	// backTracking 
-	//for (auto& pos : tempPath)
-	//{
-	//	_path.push_back(pos);
-	//	if (pos == _maze->GetEndPos())
-	//		break;
-	//}
-	// 
-	// RightHand();
+	//Dijikstra(_pos, _maze->GetEndPos());
 }
 
 Player::~Player()
@@ -158,10 +144,10 @@ void Player::BFS(Vector2 pos, Vector2 end)
 {
 	Vector2 frontPos[4] =
 	{
-		Vector2 {0, -1},	// UP		0
-		Vector2 {-1, 0},	// LEFT		1
 		Vector2 {0, 1},		// DOWN		2
-		Vector2 {1, 0}		// RIGHT	3
+		Vector2 {1, 0},		// RIGHT	3
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0}		// LEFT		1
 	};
 	queue<Vector2> q;
 
@@ -178,6 +164,9 @@ void Player::BFS(Vector2 pos, Vector2 end)
 		Vector2 here = q.front();
 		q.pop();
 
+		if (here == end)
+			break;
+
 		for (int i = 0; i < 4; i++)
 		{
 			Vector2 there = here + frontPos[i];
@@ -185,8 +174,91 @@ void Player::BFS(Vector2 pos, Vector2 end)
 				continue;
 			if (CanGo(there) == false)
 				continue;
+			if (here == there)
+				continue;
 
+			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
 			q.push(there);
+			_discovered[there.y][there.x] = true;
+			_parent[there.y][there.x] = here;
+		}
+	}
+
+	Vector2 finder = end;
+	_path.push_back(finder);
+	while (true)
+	{
+		_path.push_back(_parent[finder.y][finder.x]);
+		finder = _parent[finder.y][finder.x];
+
+		if (finder == pos)
+			break;
+	}
+
+	std::reverse(_path.begin(), _path.end());
+}
+
+void Player::Dijikstra(Vector2 start, Vector2 end)
+{
+	Vector2 frontPos[8] =
+	{
+		Vector2 {0, 1},		// DOWN		2
+		Vector2 {1, 0},		// RIGHT	3
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0},	// LEFT		1
+
+		Vector2 {1, 1},		// RIGHT_DOWN	2
+		Vector2 {-1, 1},	// LEFT_DOWN	3
+		Vector2 {1, -1},	// RIGHT_UP		0
+		Vector2 {-1, -1}	// LEFT_UP		1
+	};
+	priority_queue<Vertex_Dijikstra, vector<Vertex_Dijikstra>, greater<Vertex_Dijikstra>> pq;
+	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25,100000.0f));
+
+	Vertex_Dijikstra startV;
+	startV.pos = start;
+	startV.g = 0;
+	pq.push(startV);
+	best[start.y][start.x] = 0;
+	_discovered[start.y][start.x] = true;
+	_parent[start.y][start.x] = start;
+
+
+	while (true)
+	{
+		if (pq.empty() == true)
+			break;
+
+		Vector2 here = pq.top().pos;
+		float cost = pq.top().g;
+		pq.pop();
+
+		if (here == end)
+			break;
+
+		if (best[here.y][here.x] < cost)
+			continue;
+
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 there = here + frontPos[i];
+			if (CanGo(there) == false)
+				continue;
+			if (here == there)
+				continue;
+
+			float distance = (there - here).Length();
+			float nextCost = 1 + best[here.y][here.x];
+
+			if (best[there.y][there.x] <= nextCost)
+				continue;
+
+			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
+			Vertex_Dijikstra thereV;
+			thereV.pos = there;
+			thereV.g = nextCost;
+			best[there.y][there.x] = nextCost;
+			pq.push(thereV);
 			_discovered[there.y][there.x] = true;
 			_parent[there.y][there.x] = here;
 		}
@@ -199,9 +271,9 @@ void Player::BFS(Vector2 pos, Vector2 end)
 		_path.push_back(finder);
 		finder = _parent[finder.y][finder.x];
 
-		if (finder == pos)
+		if (finder == start)
 		{
-			_path.push_back(pos);
+			_path.push_back(start);
 			break;
 		}
 	}

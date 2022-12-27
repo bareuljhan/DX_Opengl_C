@@ -30,6 +30,7 @@ public:
 	bool IsBetween(const Vector2& a, const Vector2& b);
 
 	Vector2 NormalVector2();
+	void Normalize();
 public:
 	float x;
 	float y;
