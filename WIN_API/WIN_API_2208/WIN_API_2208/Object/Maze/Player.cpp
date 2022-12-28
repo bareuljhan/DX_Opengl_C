@@ -10,8 +10,9 @@ Player::Player(shared_ptr<Maze> maze)
 
 	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
 	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1,-1)));
-	BFS(_pos, _maze->GetEndPos());
+	//BFS(_pos, _maze->GetEndPos());
 	//Dijikstra(_pos, _maze->GetEndPos());
+	AStar(_pos, _maze->GetEndPos());
 }
 
 Player::~Player()
@@ -140,7 +141,7 @@ void Player::DFS(Vector2 pos, Vector2 end, vector<Vector2> &tempPath)
 
 }
 
-void Player::BFS(Vector2 pos, Vector2 end)
+void Player::BFS(Vector2 start, Vector2 end)
 {
 	Vector2 frontPos[4] =
 	{
@@ -151,9 +152,9 @@ void Player::BFS(Vector2 pos, Vector2 end)
 	};
 	queue<Vector2> q;
 
-	q.push(pos);
-	_discovered[pos.y][pos.x] = true;
-	_parent[pos.y][pos.x] = pos;
+	q.push(start);
+	_discovered[start.y][start.x] = true;
+	_parent[start.y][start.x] = start;
 
 
 	while (true)
@@ -184,14 +185,14 @@ void Player::BFS(Vector2 pos, Vector2 end)
 		}
 	}
 
-	Vector2 finder = end;
-	_path.push_back(finder);
+	Vector2 pos = end;
+	_path.push_back(pos);
 	while (true)
 	{
-		_path.push_back(_parent[finder.y][finder.x]);
-		finder = _parent[finder.y][finder.x];
+		_path.push_back(_parent[pos.y][pos.x]);
+		pos = _parent[pos.y][pos.x];
 
-		if (finder == pos)
+		if (pos == start)
 			break;
 	}
 
@@ -248,7 +249,11 @@ void Player::Dijikstra(Vector2 start, Vector2 end)
 				continue;
 
 			float distance = (there - here).Length();
-			float nextCost = 1 + best[here.y][here.x];
+			float nextCost = 0.0f;
+			if (i < 4)
+				nextCost = 1 + best[here.y][here.x];
+			else
+				nextCost = 1.4 + best[here.y][here.x];
 
 			if (best[there.y][there.x] <= nextCost)
 				continue;
@@ -264,14 +269,14 @@ void Player::Dijikstra(Vector2 start, Vector2 end)
 		}
 	}
 
-	Vector2 finder = _parent[end.y][end.x];
+	Vector2 pos = _parent[end.y][end.x];
 	_path.push_back(end);
 	while (true)
 	{
-		_path.push_back(finder);
-		finder = _parent[finder.y][finder.x];
+		_path.push_back(pos);
+		pos = _parent[pos.y][pos.x];
 
-		if (finder == start)
+		if (pos == start)
 		{
 			_path.push_back(start);
 			break;
@@ -279,6 +284,105 @@ void Player::Dijikstra(Vector2 start, Vector2 end)
 	}
 
 	std::reverse(_path.begin(), _path.end());
+}
+
+void Player::AStar(Vector2 start, Vector2 end)
+{
+	Vector2 frontPos[8] =
+	{
+		Vector2 {0, 1},		// DOWN		2
+		Vector2 {1, 0},		// RIGHT	3
+		Vector2 {0, -1},	// UP		0
+		Vector2 {-1, 0},	// LEFT		1
+
+		Vector2 {1, 1},		// RIGHT_DOWN	2
+		Vector2 {-1, 1},	// LEFT_DOWN	3
+		Vector2 {1, -1},	// RIGHT_UP		0
+		Vector2 {-1, -1}	// LEFT_UP		1
+	};
+
+	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25, 100000.0f));
+	priority_queue<Vertex, vector<Vertex>, greater<Vertex>> pq;
+	Vertex startV;
+	startV.pos = start;
+	startV.g = 0;
+	startV.h = start.Manhattan(end);
+
+	pq.push(startV);
+	best[start.y][start.x] = startV.h;
+	_discovered[start.y][start.x] = true;
+	_parent[start.y][start.x] = start;
+	while (true)
+	{
+		if (pq.empty() == true)
+			break;
+
+		// Vector2 here = q.front();
+		Vector2 here = pq.top().pos;
+		float g = pq.top().g;
+		float h = pq.top().h;
+		float f = g + h;
+		pq.pop();
+
+		if (here == end)
+			break;
+
+		if (best[here.y][here.x] < f)
+			continue;
+
+		for (int i = 0; i < 8; i++)
+		{
+
+			Vector2 there = here + frontPos[i];
+
+			if (CanGo(there) == false)
+				continue;
+
+			float G = 0.0f;
+			float H = there.Manhattan(end);
+			float nextCost = G + H;
+			if (i < 4)
+			{
+				G = g + 1.0f;
+				nextCost += G;
+			}
+			else
+			{
+				G = g + 1.4f;
+				nextCost += G;
+			}
+
+			if (nextCost >= best[there.y][there.x])
+				continue;
+
+			Vertex v;
+			v.pos = there;
+			v.g = G;
+			v.h = H;
+			pq.push(v);
+			_discovered[there.y][there.x] = true;
+			best[there.y][there.x] = G + H;
+			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
+			_parent[there.y][there.x] = here;
+		}
+	}
+
+	Vector2 pos = _parent[end.y][end.x];
+	_path.push_back(end);
+	while (true)
+	{
+		_path.push_back(pos);
+		pos = _parent[pos.y][pos.x];
+
+		if (pos == start)
+		{
+			_path.push_back(start);
+			break;
+		}
+	}
+
+	std::reverse(_path.begin(), _path.end());
+
 }
 
 bool Player::CanGo(Vector2 pos)

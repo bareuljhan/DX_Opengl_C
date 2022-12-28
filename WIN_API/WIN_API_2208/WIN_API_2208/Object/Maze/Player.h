@@ -44,6 +44,7 @@ public:
 	void DFS(Vector2 pos, Vector2 end, vector<Vector2> &tempPath);
 	void BFS(Vector2 pos, Vector2 end);
 	void Dijikstra(Vector2 start, Vector2 end);
+	void AStar(Vector2 start, Vector2 end);
 	bool CanGo(Vector2 pos);
 
 

@@ -141,3 +141,9 @@ void Vector2::Normalize()
 	y = y / length;
 }
 
+int Vector2::Manhattan(const Vector2& other)
+{
+	int mx = other.x - x;
+	int my = other.y - y;
+	return mx + my;
+}
