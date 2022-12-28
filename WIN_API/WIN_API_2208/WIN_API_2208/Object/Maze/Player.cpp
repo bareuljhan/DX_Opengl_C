@@ -4,27 +4,38 @@
 Player::Player(shared_ptr<Maze> maze)
 :_maze(maze)
 {
-	_pos = _maze->GetStartPos();
-	_maze->GetBlock(_pos)->SetType(Block::Type::PLAYER);
-
-
-	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
-	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1,-1)));
-	//BFS(_pos, _maze->GetEndPos());
-	//Dijikstra(_pos, _maze->GetEndPos());
-	AStar(_pos, _maze->GetEndPos());
+	Init();
 }
 
 Player::~Player()
 {
 }
 
+void Player::Init()
+{
+	_pos = _maze->GetStartPos();
+	_maze->GetBlock(_pos)->SetType(Block::Type::PLAYER);
+
+
+	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
+	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1, -1)));
+	//BFS(_pos, _maze->GetEndPos());
+	//Dijikstra(_pos, _maze->GetEndPos());
+	AStar(_pos, _maze->GetEndPos());
+}
+
 void Player::Update()
 {
 	if (_pathIndex >= _path.size())
+	{
+		_maze->CreateMaze();
+		_pathIndex = 0;
+		_path.clear();
+		Init();
 		return;
+	}
 
-	_time += 0.2f;
+	_time += 0.4f;
 
 	if (_time > 1.0f)
 	{
@@ -301,12 +312,15 @@ void Player::AStar(Vector2 start, Vector2 end)
 		Vector2 {-1, -1}	// LEFT_UP		1
 	};
 
-	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25, 100000.0f));
 	priority_queue<Vertex, vector<Vertex>, greater<Vertex>> pq;
+	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25, 100000.0f));
+
 	Vertex startV;
+
 	startV.pos = start;
 	startV.g = 0;
 	startV.h = start.Manhattan(end);
+	startV.f = startV.g + startV.h;
 
 	pq.push(startV);
 	best[start.y][start.x] = startV.h;
@@ -324,11 +338,10 @@ void Player::AStar(Vector2 start, Vector2 end)
 		float f = g + h;
 		pq.pop();
 
-		if (here == end)
-			break;
-
 		if (best[here.y][here.x] < f)
 			continue;
+		if (here == end)
+			break;
 
 		for (int i = 0; i < 8; i++)
 		{
@@ -338,30 +351,32 @@ void Player::AStar(Vector2 start, Vector2 end)
 			if (CanGo(there) == false)
 				continue;
 
-			float G = 0.0f;
-			float H = there.Manhattan(end);
-			float nextCost = G + H;
+			float nextG = 0.0f;
+			float nextH = there.Manhattan(end);
+			float nextF = nextG + nextH;
 			if (i < 4)
 			{
-				G = g + 1.0f;
-				nextCost += G;
+				nextG = g + 1.0f;
+				nextF += nextG;
 			}
 			else
 			{
-				G = g + 1.4f;
-				nextCost += G;
+				nextG = g + 1.4f;
+				nextF += nextG;
 			}
 
-			if (nextCost >= best[there.y][there.x])
+			if (nextF >= best[there.y][there.x])
 				continue;
 
 			Vertex v;
 			v.pos = there;
-			v.g = G;
-			v.h = H;
+			v.g = nextG;
+			v.h = nextH;
+			v.f = nextF;
 			pq.push(v);
 			_discovered[there.y][there.x] = true;
-			best[there.y][there.x] = G + H;
+			best[there.y][there.x] = nextG + nextH;
+
 			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
 			_parent[there.y][there.x] = here;
 		}

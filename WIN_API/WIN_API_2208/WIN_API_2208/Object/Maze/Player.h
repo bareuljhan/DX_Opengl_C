@@ -38,6 +38,8 @@ public:
 	Player(shared_ptr<Maze> maze);
 	~Player();
 
+	void Init();
+
 	void Update();
 
 	void RightHand();

@@ -31,9 +31,8 @@ public:
 
 	Vector2 NormalVector2();
 	void Normalize();
-	int Manhattan(const Vector2& other);
+	float Manhattan(const Vector2& other) const;
 public:
 	float x;
 	float y;
 };
-
