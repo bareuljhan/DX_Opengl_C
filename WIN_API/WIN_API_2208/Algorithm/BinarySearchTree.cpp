@@ -48,23 +48,63 @@ void BinarySearchTree::PrintTree(Node* node)
 	PrintTree(node->right);
 }
 
-Node* BinarySearchTree::Search(Node* root, int key)
+Node* BinarySearchTree::Search(Node* node, int key)
 {
-	// 
+	while (true)
+	{
+		if (node->key == key)
+			break;
+		if (node->left->key <= key)
+		{
+			if (node->left->key == key)
+			{
+				node = node->left;
+				break;
+			}
+			else
+				Search(node->left, key);
+		}
+		if (node->right->key == key)
+		{
+			if (node->right->key == key)
+			{
+				node = node->right;
+				break;
+			}
+			else
+				Search(node->right, key);
+		}
+	}
+	return node;
+}
+
+Node* BinarySearchTree::Min(Node* node)
+{
+	// ╬Й ╨нем ╢ы╫ц
+	while (true)
+	{
+		if (node->left == nullptr)
+			node = node->left;
+			break;
+		if (node > node->left)
+		{
+			Min(node);
+		}
+	}
+	return node;
+}
+
+Node* BinarySearchTree::Max(Node* node)
+{
+	while (true)
+	{
+		if (node->right == nullptr)
+			break;
+	}
 	return nullptr;
 }
 
-Node* BinarySearchTree::Min(Node* root)
-{
-	return nullptr;
-}
-
-Node* BinarySearchTree::Max(Node* root)
-{
-	return nullptr;
-}
-
-Node* BinarySearchTree::Previous(Node* root)
+Node* BinarySearchTree::Previous(Node* node)
 {
 	return nullptr;
 }

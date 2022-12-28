@@ -30,6 +30,7 @@ int main()
 	tree.PrintTree(tree._root);
 
 	Node* find = tree.Search(tree._root, 30);
+	Node* min = tree.Min(tree._root);
 
 	return 0;
 }
