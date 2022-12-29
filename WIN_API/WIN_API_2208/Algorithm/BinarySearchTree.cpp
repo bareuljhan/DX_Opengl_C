@@ -50,66 +50,92 @@ void BinarySearchTree::PrintTree(Node* node)
 
 Node* BinarySearchTree::Search(Node* node, int key)
 {
-	while (true)
+	if (node == nullptr)
+		return node;
+
+	if (node->key == key)
+		return node;
+
+	if (node->key > key)
 	{
-		if (node->key == key)
-			break;
-		if (node->left->key <= key)
-		{
-			if (node->left->key == key)
-			{
-				node = node->left;
-				break;
-			}
-			else
-				Search(node->left, key);
-		}
-		if (node->right->key == key)
-		{
-			if (node->right->key == key)
-			{
-				node = node->right;
-				break;
-			}
-			else
-				Search(node->right, key);
-		}
+		return Search(node->left, key);
 	}
-	return node;
+	else
+	{
+		return Search(node->right, key);
+	}
 }
 
 Node* BinarySearchTree::Min(Node* node)
 {
-	// ¾ê ºÎÅÍ ´Ù½Ã
+	if (node == nullptr)
+	{
+		return node;
+	}
+
 	while (true)
 	{
 		if (node->left == nullptr)
-			node = node->left;
-			break;
-		if (node > node->left)
 		{
-			Min(node);
+			return node;
 		}
+		node = node->left;
 	}
-	return node;
 }
 
 Node* BinarySearchTree::Max(Node* node)
 {
+	if (node == nullptr)
+		return node;
+
 	while (true)
 	{
 		if (node->right == nullptr)
-			break;
+		{
+			return node;
+		}
+		node = node->right;
 	}
-	return nullptr;
 }
 
 Node* BinarySearchTree::Previous(Node* node)
 {
-	return nullptr;
+	if (node == nullptr)
+		return node;
+
+	if (node->left != nullptr)
+	{
+		if (Max(node->left) == nullptr)
+			return node->left;
+		else
+			return Max(node->left);
+	}
+
+	while (node->parent != nullptr && node == node->parent->left)
+	{
+		node = node->parent;
+		node->parent = node->parent->parent;
+	}
+	return node->parent = node->parent->parent;
 }
 
 Node* BinarySearchTree::Next(Node* node)
 {
-	return nullptr;
+	if (node == nullptr)
+		return node;
+
+	if (node->right != nullptr)
+	{
+		if (Min(node->right) == nullptr)
+			return node->right;
+		else
+			return Min(node->right);
+	}
+
+	while (node->parent != nullptr && node == node->parent->right)
+	{
+		node = node->parent;
+		node->parent = node->parent->parent;
+	}
+	return node->parent = node->parent->parent;
 }

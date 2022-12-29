@@ -31,6 +31,8 @@ int main()
 
 	Node* find = tree.Search(tree._root, 30);
 	Node* min = tree.Min(tree._root);
+	Node* prev = tree.Previous(tree._root);
+	Node* next = tree.Next(tree._root);
 
 	return 0;
 }
