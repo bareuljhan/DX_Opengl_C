@@ -72,6 +72,11 @@ Node* BinarySearchTree::Min(Node* node)
 	{
 		return node;
 	}
+	
+
+	//if (node->left != nullptr) => 재귀함수
+	//	return Min(node->left);
+	//return node;
 
 	while (true)
 	{
@@ -87,6 +92,10 @@ Node* BinarySearchTree::Max(Node* node)
 {
 	if (node == nullptr)
 		return node;
+
+	//if (node->right != nullptr) => 재귀함수
+	//	return Max(node->left);
+	//return node;
 
 	while (true)
 	{
@@ -105,18 +114,10 @@ Node* BinarySearchTree::Previous(Node* node)
 
 	if (node->left != nullptr)
 	{
-		if (Max(node->left) == nullptr)
-			return node->left;
-		else
-			return Max(node->left);
+		return Max(node->left);
 	}
-
-	while (node->parent != nullptr && node == node->parent->left)
-	{
-		node = node->parent;
-		node->parent = node->parent->parent;
-	}
-	return node->parent = node->parent->parent;
+	else
+		return nullptr;
 }
 
 Node* BinarySearchTree::Next(Node* node)
@@ -126,16 +127,48 @@ Node* BinarySearchTree::Next(Node* node)
 
 	if (node->right != nullptr)
 	{
-		if (Min(node->right) == nullptr)
-			return node->right;
-		else
-			return Min(node->right);
+		Min(node->right);
+	}
+	else return nullptr;
+}
+
+void BinarySearchTree::Delete(Node* node)
+{
+	if (node == nullptr)
+		return;
+
+	if (node->left == nullptr)
+		Replace(node, node->right);
+	else if (node->right == nullptr)
+		Replace(node, node->left);
+	else
+	{
+		Node* prev = Previous(node);
+		node->key = prev->key;
+		node->data = prev->data;
+		Delete(prev);
+	}
+}
+
+void BinarySearchTree::Replace(Node* node1, Node* node2)
+{
+	// node1이 루트일 때
+	if (node1->parent == nullptr)
+		_root = node2;
+
+	// node1이 부모쪽에서 왼쪽에 있는 애일 때
+	else if (node1 == node1->parent->left)
+	{
+		node1->parent->left = node2;
+	}
+	// node1이 부모쪽에서 오른쪽에 있는 애일 때
+	else
+	{
+		node1->parent->right = node2;
 	}
 
-	while (node->parent != nullptr && node == node->parent->right)
-	{
-		node = node->parent;
-		node->parent = node->parent->parent;
-	}
-	return node->parent = node->parent->parent;
+	if(node2 != nullptr)
+		node2->parent = node1->parent;
+
+	delete node1;
 }

@@ -1,0 +1,99 @@
+#include <iostream>
+#include <list>
+#include <vector>
+#include <unordered_map>
+#include <stack>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+// 길드시스템
+// 유저가 1000명 정도
+
+struct User
+{
+	int guild_id;
+};
+
+void GuildSystem()
+{
+	vector<User> users;
+
+	for (int i = 0; i < true; i++)
+	{
+		users.push_back(User{i});
+	}
+	// 0 번 유저 : 0
+	// 1 번 유저 : 1
+
+	// 1번이랑 5번 유저랑 같은 길드를 만들고 싶다.
+	users[1].guild_id = users[5].guild_id;
+
+	// guild가 2인 애랑 5인 애랑 통합
+	for (auto& user : users)
+	{
+		if (user.guild_id == 2)
+			user.guild_id = 5;
+	}
+	// [0] [1] [2] [3] [4] [5]
+	//  0	5	5	3	4	5
+
+	// N번째 아이를 찾고싶다... -> 상수 users[N]
+	// 길드 통합 -> 0(N)
+}
+
+// 트리구조를 이용한 서로소 집합
+
+class DisJointSet
+{
+public:
+	DisJointSet(int n)
+	:_parent(n, 0)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			_parent[i] = i;
+		}
+	}
+
+	// 너의 최고 대장이 누구야
+	int FindLeader(int u)
+	{
+		// 기저사례 : 쪼갤 수 없는 상태
+		if (u == _parent[u])
+			return u;
+		int parent = _parent[u];
+		return FindLeader(parent);
+	}
+
+	void Merge(int u, int v)
+	{
+		int uLeader = FindLeader(u);
+		int vLeader = FindLeader(v);
+
+		if (vLeader == uLeader)
+			return;
+
+		_parent[uLeader] = vLeader;
+	}
+private:
+	vector<int> _parent;
+};
+int main()
+{
+	DisJointSet ds(10);
+
+	cout << ds.FindLeader(5) << endl; // 5
+
+	ds.Merge(0, 5);
+	ds.Merge(1, 2);
+	ds.Merge(3, 4);
+	ds.Merge(0, 3);
+
+	cout << ds.FindLeader(0) << endl;
+	ds.Merge(0, 9);
+	cout << ds.FindLeader(9) << endl;
+
+	return 0;
+}
