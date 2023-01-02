@@ -5,7 +5,8 @@ Block::Block()
 {
 	_rect = make_shared<RectCollider>(Vector2(CENTER_X, CENTER_Y), Vector2(14, 14));
 
-	HBRUSH white = CreateSolidBrush(RGB(255, 255, 255));
+	HBRUSH white = CreateSolidBrush(RGB(
+		5, 255, 255));
 	HBRUSH green = CreateSolidBrush(RGB(0, 255, 0));
 	HBRUSH red = CreateSolidBrush(RGB(255, 0, 0));
 	HBRUSH yellow = CreateSolidBrush(RGB(0xFF, 0xFF, 0));

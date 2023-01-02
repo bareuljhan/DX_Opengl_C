@@ -17,8 +17,8 @@ void Player::Init()
 	_maze->GetBlock(_pos)->SetType(Block::Type::PLAYER);
 
 
-	_discovered = vector<vector<bool>>(25, vector<bool>(25, false));
-	_parent = vector<vector<Vector2>>(25, vector<Vector2>(25, Vector2(-1, -1)));
+	_discovered = vector<vector<bool>>(_poolCountY, vector<bool>(_poolCountX, false));
+	_parent = vector<vector<Vector2>>(_poolCountY, vector<Vector2>(_poolCountX, Vector2(-1, -1)));
 	//BFS(_pos, _maze->GetEndPos());
 	//Dijikstra(_pos, _maze->GetEndPos());
 	AStar(_pos, _maze->GetEndPos());
@@ -26,9 +26,21 @@ void Player::Init()
 
 void Player::Update()
 {
+	int randValue = rand() % 3;
+
 	if (_pathIndex >= _path.size())
 	{
-		_maze->CreateMaze();
+		switch (randValue)
+		{
+		case 0:
+			_maze->CreateMaze();
+		case 1:
+			_maze->CreateMaze_Kruskal();
+		case 2:
+			_maze->CreateMaze_Prim();
+		default:
+			break;
+		}
 		_pathIndex = 0;
 		_path.clear();
 		Init();
@@ -225,7 +237,7 @@ void Player::Dijikstra(Vector2 start, Vector2 end)
 		Vector2 {-1, -1}	// LEFT_UP		1
 	};
 	priority_queue<Vertex_Dijikstra, vector<Vertex_Dijikstra>, greater<Vertex_Dijikstra>> pq;
-	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25,100000.0f));
+	vector<vector<float>> best = vector<vector<float>>(_poolCountY, vector<float>(_poolCountX,100000.0f));
 
 	Vertex_Dijikstra startV;
 	startV.pos = start;
@@ -269,7 +281,7 @@ void Player::Dijikstra(Vector2 start, Vector2 end)
 			if (best[there.y][there.x] <= nextCost)
 				continue;
 
-			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
+			//_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
 			Vertex_Dijikstra thereV;
 			thereV.pos = there;
 			thereV.g = nextCost;
@@ -313,7 +325,7 @@ void Player::AStar(Vector2 start, Vector2 end)
 	};
 
 	priority_queue<Vertex, vector<Vertex>, greater<Vertex>> pq;
-	vector<vector<float>> best = vector<vector<float>>(25, vector<float>(25, 100000.0f));
+	vector<vector<float>> best = vector<vector<float>>(_poolCountY, vector<float>(_poolCountX, 100000.0f));
 
 	Vertex startV;
 
@@ -377,7 +389,7 @@ void Player::AStar(Vector2 start, Vector2 end)
 			_discovered[there.y][there.x] = true;
 			best[there.y][there.x] = nextG + nextH;
 
-			_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
+			//_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
 			_parent[there.y][there.x] = here;
 		}
 	}

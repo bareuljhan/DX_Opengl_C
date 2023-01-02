@@ -19,6 +19,7 @@
 #include <vector>
 #include <stack>
 #include <queue>
+#include <map>
 #include <unordered_map>
 #include <string>
 #include <algorithm>
@@ -28,6 +29,7 @@ using namespace std;
 
 // Framework
 #include "framework/Math/Vector2.h"
+#include "framework/Math/DisJointSet.h"
 
 #include "framework/Collider/Line.h"
 #include "framework/Collider/Collider.h"

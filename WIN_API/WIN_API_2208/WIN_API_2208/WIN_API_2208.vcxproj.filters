@@ -87,12 +87,15 @@
     <ClInclude Include="Object\Maze\Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="framework\Math\DisJointSet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WIN_API_2208.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="framework.cpp">
+    <ClCompile Include="x64\framework.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="framework\Math\Vector2.cpp">
@@ -150,6 +153,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object\Maze\Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\Math\DisJointSet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
