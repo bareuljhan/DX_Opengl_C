@@ -14,7 +14,7 @@ public:
 
 	struct Edge
 	{
-		int cost;
+		int cost = 0;
 		Vector2 v;
 
 		bool operator<(const Edge& other) const

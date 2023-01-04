@@ -3,7 +3,7 @@
 
 Maze::Maze()
 {
-	Vector2 offset = { 400, 150 };
+	Vector2 offset = { 400,150 };
 
 	for (int y = 0; y < _poolCountY; ++y)
 	{
@@ -18,6 +18,7 @@ Maze::Maze()
 			_blockMatrix[y][x] = block;
 		}
 	}
+
 	CreateMaze_Prim();
 }
 
@@ -43,8 +44,8 @@ void Maze::Render(HDC hdc)
 	for (auto block : _blocks)
 		block->Render(hdc);
 
-	wstring maze = L"Maze!!";
-	TextOut(hdc, CENTER_X - 30, 100, maze.c_str(), maze.size());
+	wstring maze = L"Maze!!!";
+	TextOut(hdc, CENTER_X - 100, 100, maze.c_str(), maze.size());
 }
 
 void Maze::CreateMaze()
@@ -62,7 +63,7 @@ void Maze::CreateMaze()
 		}
 	}
 
-	//랜덤으로 우측 혹은 아래로 길을 뚫는 작업
+	// 랜덤으로 우측 혹은 아래로 길을 뚫는 작업
 	for (int y = 0; y < _poolCountY; ++y)
 	{
 		for (int x = 0; x < _poolCountX; ++x)
@@ -77,9 +78,8 @@ void Maze::CreateMaze()
 				continue;
 
 			// 미로가 끝나는 지점이면 길 뚫기 중지
-			if (x == _poolCountX - 2 && y == _poolCountY - 2) // 23,23이 끝 점이기 때문에...
+			if (x == _poolCountX - 2 && y == _poolCountY - 2)
 			{
-				// 끝나는 지점임을 표시
 				_blockMatrix[y][x]->SetType(Block::Type::END);
 				continue;
 			}
@@ -87,13 +87,13 @@ void Maze::CreateMaze()
 			// 랜덤으로 우측 혹은 아래로만 뚫었을 때 길이 안생기는 것 예외처리
 			if (y == _poolCountY - 2)
 			{
-				_blockMatrix[y][x + 1]->SetType(Block::Type::ABLE); // 전부 아래쪽으로만 간 경우
+				_blockMatrix[y][x + 1]->SetType(Block::Type::ABLE);
 				continue;
 			}
 
 			if (x == _poolCountX - 2)
 			{
-				_blockMatrix[y + 1][x]->SetType(Block::Type::ABLE); // 전부 오른쪽으로만 간 경우
+				_blockMatrix[y + 1][x]->SetType(Block::Type::ABLE);
 				continue;
 			}
 
@@ -102,6 +102,7 @@ void Maze::CreateMaze()
 				_blockMatrix[y][x + 1]->SetType(Block::Type::ABLE);
 			else
 				_blockMatrix[y + 1][x]->SetType(Block::Type::ABLE);
+
 		}
 	}
 }
@@ -155,8 +156,7 @@ void Maze::CreateMaze_Kruskal()
 		}
 	}
 
-
-	std::sort(edges.begin(), edges.end(), [](const Kruskal_Edge& a, const Kruskal_Edge& b) ->bool
+	std::sort(edges.begin(), edges.end(), [](const Kruskal_Edge& a, const Kruskal_Edge& b) -> bool
 		{
 			return a.cost < b.cost;
 		});
@@ -205,7 +205,6 @@ void Maze::CreateMaze_Prim()
 
 	for (int y = 0; y < _poolCountY; y++)
 	{
-
 		for (int x = 0; x < _poolCountX; x++)
 		{
 			if (x % 2 == 0 || y % 2 == 0)
@@ -218,7 +217,6 @@ void Maze::CreateMaze_Prim()
 				const int randValue = rand() % 100;
 				Vector2 u = Vector2{ x,y };
 				Vector2 v = Vector2{ x + 2, y };
-
 				edges[u].push_back({ randValue, v });
 				edges[v].push_back({ randValue, u });
 			}
@@ -228,7 +226,6 @@ void Maze::CreateMaze_Prim()
 				const int randValue = rand() % 100;
 				Vector2 u = Vector2{ x,y };
 				Vector2 v = Vector2{ x, y + 2 };
-
 				edges[u].push_back({ randValue, v });
 				edges[v].push_back({ randValue, u });
 			}
@@ -236,10 +233,10 @@ void Maze::CreateMaze_Prim()
 	}
 
 	// 해당 정점이 집합에 포함이 되어있나?
-	map<Vector2, bool> added; // -> added[{1,1}] = true;
+	map<Vector2, bool> added; //
 	// 어떤 정점이 누구에 의해 연결되어 있는지
 	map<Vector2, Vector2> parent;
-	// 만들고 있는 집합에 인접한 간선 중 해당 정점에 닿는 최소 간선의 정보
+	// 만들고 있는 집합에 인접한 간선 중, 해당 정점에 닿는 최소 간선의 정보
 	map<Vector2, int> best;
 
 	// added, best 초기화
@@ -257,7 +254,7 @@ void Maze::CreateMaze_Prim()
 	pq.push(Edge({ 0, startPos }));
 	best[startPos] = 0;
 	parent[startPos] = startPos;
-	
+
 	while (true)
 	{
 		if (pq.empty() == true)
@@ -269,12 +266,11 @@ void Maze::CreateMaze_Prim()
 		// 새로 연결된 정점
 		Vector2 vertex = bestEdge.v;
 
-		// 이미 추가되었으면 스킵
 		if (added[vertex])
 			continue;
 
-		added[vertex] = true; // 집합이라는 표시
-		
+		added[vertex] = true;
+
 		// 맵에 적용
 		{
 			int x = (parent[vertex].x + vertex.x) / 2;
@@ -287,16 +283,14 @@ void Maze::CreateMaze_Prim()
 		{
 			if (added[edge.v])
 				continue;
-			
-			// 다른 경우로 더 좋은 후보로 발견이 되었었으면 스킵
+
+			// 다른 경로로 더 좋은 후보가 발견이 되어있었으면 스킵
 			if (edge.cost > best[edge.v])
 				continue;
 
 			best[edge.v] = edge.cost;
 			parent[edge.v] = vertex;
 			pq.push(edge);
-
 		}
 	}
 }
-

@@ -26,18 +26,22 @@ void Player::Init()
 
 void Player::Update()
 {
-	int randValue = rand() % 3;
 
 	if (_pathIndex >= _path.size())
 	{
+		int randValue = rand() % 3;
+
 		switch (randValue)
 		{
 		case 0:
 			_maze->CreateMaze();
+			break;
 		case 1:
 			_maze->CreateMaze_Kruskal();
+			break;
 		case 2:
 			_maze->CreateMaze_Prim();
+			break;
 		default:
 			break;
 		}
@@ -313,99 +317,83 @@ void Player::AStar(Vector2 start, Vector2 end)
 {
 	Vector2 frontPos[8] =
 	{
-		Vector2 {0, 1},		// DOWN		2
-		Vector2 {1, 0},		// RIGHT	3
-		Vector2 {0, -1},	// UP		0
-		Vector2 {-1, 0},	// LEFT		1
+		Vector2 {0, 1}, // DOWN 2
+		Vector2 {1, 0}, // RIGHT 3
+		Vector2 {0, -1}, // UP 0
+		Vector2 {-1, 0}, // LEFT 1
 
-		Vector2 {1, 1},		// RIGHT_DOWN	2
-		Vector2 {-1, 1},	// LEFT_DOWN	3
-		Vector2 {1, -1},	// RIGHT_UP		0
-		Vector2 {-1, -1}	// LEFT_UP		1
+		Vector2 {1, 1}, // RIGHT_DOWN
+		Vector2 {-1, 1}, // LEFT_DOWN
+		Vector2 {1, -1}, // RIGHT UP
+		Vector2 {-1, -1} // LEFT UP
 	};
 
 	priority_queue<Vertex, vector<Vertex>, greater<Vertex>> pq;
 	vector<vector<float>> best = vector<vector<float>>(_poolCountY, vector<float>(_poolCountX, 100000.0f));
 
 	Vertex startV;
-
 	startV.pos = start;
 	startV.g = 0;
 	startV.h = start.Manhattan(end);
 	startV.f = startV.g + startV.h;
-
 	pq.push(startV);
-	best[start.y][start.x] = startV.h;
+	best[start.y][start.x] = startV.f;
 	_discovered[start.y][start.x] = true;
 	_parent[start.y][start.x] = start;
+
 	while (true)
 	{
 		if (pq.empty() == true)
 			break;
 
-		// Vector2 here = q.front();
-		Vector2 here = pq.top().pos;
-		float g = pq.top().g;
-		float h = pq.top().h;
-		float f = g + h;
+		Vertex here = pq.top();
+		float f = here.f;
 		pq.pop();
 
-		if (best[here.y][here.x] < f)
-			continue;
-		if (here == end)
+		if (here.pos == end)
 			break;
+
+		if (best[here.pos.y][here.pos.x] < f)
+			continue;
 
 		for (int i = 0; i < 8; i++)
 		{
-
-			Vector2 there = here + frontPos[i];
-
+			Vector2 there = here.pos + frontPos[i];
 			if (CanGo(there) == false)
 				continue;
-
-			float nextG = 0.0f;
-			float nextH = there.Manhattan(end);
-			float nextF = nextG + nextH;
-			if (i < 4)
-			{
-				nextG = g + 1.0f;
-				nextF += nextG;
-			}
-			else
-			{
-				nextG = g + 1.4f;
-				nextF += nextG;
-			}
-
-			if (nextF >= best[there.y][there.x])
+			if (here.pos == there)
 				continue;
 
-			Vertex v;
-			v.pos = there;
-			v.g = nextG;
-			v.h = nextH;
-			v.f = nextF;
-			pq.push(v);
-			_discovered[there.y][there.x] = true;
-			best[there.y][there.x] = nextG + nextH;
+			float distance = (there - here.pos).Length();
+			float nextG = distance + here.g;
+			float nextH = there.Manhattan(end);
+			float nextF = nextG + nextH;
+
+			if (best[there.y][there.x] < nextF)
+				continue;
 
 			//_maze->GetBlock(there)->SetType(Block::Type::SEARCH_PRINT);
-			_parent[there.y][there.x] = here;
+			Vertex thereV;
+			thereV.pos = there;
+			thereV.g = nextG;
+			thereV.h = nextH;
+			thereV.f = nextF;
+			best[there.y][there.x] = nextF;
+			pq.push(thereV);
+			_discovered[there.y][there.x] = true;
+			_parent[there.y][there.x] = here.pos;
 		}
 	}
 
-	Vector2 pos = _parent[end.y][end.x];
-	_path.push_back(end);
+	Vector2 pos = end;
+	_path.push_back(pos);
 	while (true)
 	{
-		_path.push_back(pos);
+		_path.push_back(_parent[pos.y][pos.x]);
 		pos = _parent[pos.y][pos.x];
 
 		if (pos == start)
-		{
-			_path.push_back(start);
 			break;
-		}
 	}
 
 	std::reverse(_path.begin(), _path.end());
