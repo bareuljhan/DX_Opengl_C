@@ -13,7 +13,7 @@ using namespace std;
 // f(1) = 1
 // f(n) = f(n-1) + f(n-2)
 
-int cache[100];
+vector<int> cache = vector<int>(100, -1);
 
 int Fibonacci(int n, int& count)
 {
@@ -23,6 +23,7 @@ int Fibonacci(int n, int& count)
 	if (n == 2)
 		count++;
 
+	// 메모이제이션
 	// 캐시
 	if (cache[n] != -1)
 		return cache[n];
@@ -31,7 +32,6 @@ int Fibonacci(int n, int& count)
 	cache[n] = Fibonacci(n - 1, count) + Fibonacci(n - 2, count);
 	return cache[n];	
 }
-
 
 int main()
 {
